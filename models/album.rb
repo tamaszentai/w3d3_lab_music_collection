@@ -3,7 +3,7 @@ require_relative('../db/sql_runner')
 
 class Album
 
-  attr_reader :id, :title, :genre, :artist_id
+  attr_accessor :id, :title, :genre, :artist_id
 
   def initialize(options)
     @title = options['title']
@@ -35,4 +35,28 @@ class Album
     return artist
   end
 
+  def update()
+    sql = "UPDATE FROM albums SET (
+      title,
+      genre,
+      artist_id
+    ) =
+    (
+      $1, $2, $3
+      )
+      WHERE id = $4"
+      values = [@title, @genre, @artist_id, @id]
+      SqlRunner.run(sql, values)
+    end
+
+    def delete()
+      sql = "DELETE FROM albums WHERE id = $1"
+      values = [@id]
+      SqlRunner.run(sql, values)
+    end
+
+    def delete_all()
+      sql = "DELETE FROM albums"
+      SqlRunner.run(sql)
+    end
 end
